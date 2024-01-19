@@ -1,0 +1,4 @@
+[{"ime":"Dorian Gray","datum":"21.2.2001","broj str":300,"cijena":22.1,"autor":"Oscar Wilde","opis":"verry good book", "kategorija": "science"},
+  {"ime":"HP","datum":"21.2.2001","broj str":400,"cijena":22.1,"autor":"Rowling","opis":"verry good book", "kategorija": "thriller"},
+  {"ime":"Leonardo","datum":"21.2.2001","broj str":210,"cijena":22.1,"autor":"Unknown","opis":"verry good book", "kategorija": "fantasy"}
+]
