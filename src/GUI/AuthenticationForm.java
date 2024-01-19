@@ -82,7 +82,6 @@ public class AuthenticationForm extends JFrame {
 
         // Postavljanje vidljivosti prozora
         setVisible(true);
-
     }
 }
 
