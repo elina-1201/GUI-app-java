@@ -69,7 +69,7 @@ public class AuthenticationForm extends JFrame {
         add(registerButton, gbc);
 
         // Dodavanje akcije na dugme za prijavu
-        loginButton.addActionListener(new LoginListener(usernameField, passwordField));
+        loginButton.addActionListener(new LoginListener(usernameField, passwordField, this));
 
         // Dodavanje akcije na dugme za registraciju
         registerButton.addActionListener(new RegisterListener(usernameField, passwordField));
@@ -82,6 +82,7 @@ public class AuthenticationForm extends JFrame {
 
         // Postavljanje vidljivosti prozora
         setVisible(true);
+
     }
 }
 
