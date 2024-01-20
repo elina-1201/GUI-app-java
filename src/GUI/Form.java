@@ -14,8 +14,7 @@ public abstract class Form extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(1000, 1000);
-//        frame.setSize(500, 500);
+        frame.setSize(1500, 1000);
         frame.setLocationRelativeTo(null);
     }
 }

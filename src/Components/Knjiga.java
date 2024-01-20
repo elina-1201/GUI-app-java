@@ -1,14 +1,15 @@
 package Components;
 
-import java.util.Date;
-
 public class Knjiga extends Resurs {
- private String autor;
- private int brojStranica;
- private String kategorija;
 
-    public Knjiga(String ime, String opis, double cijena, String datumKreiranja, boolean dostupnost, String autor, int brojStranica, String kategorija) {
-        super(ime, opis, cijena, datumKreiranja, dostupnost);
+    private String isbn;
+    private String autor;
+    private int brojStranica;
+    private String kategorija;
+
+    public Knjiga(){}
+    public Knjiga(String ime, String opis, double cijena, boolean dostupnost, Korisnik vlasnik, String autor, String isbn, int brojStranica, String kategorija, int brPrimjeraka) {
+        super(ime, opis, cijena, dostupnost, brPrimjeraka, vlasnik);
         this.autor = autor;
         this.brojStranica = brojStranica;
     }
@@ -26,7 +27,9 @@ public class Knjiga extends Resurs {
     }
 
     public void setBrojStranica(int brojStranica) {
-        this.brojStranica = brojStranica;
+        if(brojStranica > 0) {
+            this.brojStranica = brojStranica;
+        }
     }
     public void setKategorija(String kategorija) {
         this.kategorija = kategorija;
@@ -34,5 +37,13 @@ public class Knjiga extends Resurs {
 
     public String getKategorija() {
         return kategorija;
+    }
+
+    public String  getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }

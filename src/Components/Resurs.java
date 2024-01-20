@@ -1,22 +1,23 @@
 package Components;
 
-import java.util.Date;
-
 public class Resurs {
     private String ime;
     private String opis;
     private double cijena;
-    private String datumKreiranja;
     private boolean dostupnost;
+    private int brPrimjeraka;
+    private Korisnik vlasnik;
 
+    public Resurs() {
+    }
 
-
-    public Resurs(String ime, String opis, double cijena, String datumKreiranja, boolean dostupnost) {
+    public Resurs(String ime, String opis, double cijena, boolean dostupnost, int brPrimjeraka, Korisnik vlasnik) {
         this.ime = ime;
         this.opis = opis;
         this.cijena = cijena;
-        this.datumKreiranja = datumKreiranja;
         this.dostupnost = dostupnost;
+        this.brPrimjeraka = brPrimjeraka;
+        this.vlasnik = vlasnik;
     }
 
     public String getIme() {
@@ -39,16 +40,16 @@ public class Resurs {
         return cijena;
     }
 
+    public Korisnik getVlasnik() {
+        return vlasnik;
+    }
+
+    public void setVlasnik(Korisnik vlasnik) {
+        this.vlasnik = vlasnik;
+    }
+
     public void setCijena(double cijena) {
         this.cijena = cijena;
-    }
-
-    public String getDatumKreiranja() {
-        return datumKreiranja;
-    }
-
-    public void setDatumKreiranja(String datumKreiranja) {
-        this.datumKreiranja = datumKreiranja;
     }
 
     public boolean isDostupnost() {
@@ -56,8 +57,21 @@ public class Resurs {
     }
 
     public void setDostupnost(boolean dostupnost) {
-        this.dostupnost = dostupnost;
+        if(this.brPrimjeraka == 0) {
+            this.dostupnost = false;
+        }
+        else {
+            this.dostupnost = dostupnost;
+        }
     }
 
+    public void setBrPrimjeraka(int brPrimjeraka) {
+        if(brPrimjeraka >= 0) {
+            this.brPrimjeraka = brPrimjeraka;
+        }
+    }
 
+    public int getBrPrimjeraka() {
+        return brPrimjeraka;
+    }
 }

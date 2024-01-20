@@ -28,8 +28,9 @@ public class LoginListener implements ActionListener {
         String username = usernameField.getText();
         String password = String.valueOf(passwordField.getPassword());
 
+        Korisnik korisnik = new Korisnik(username, password);
         // Kreiranje instance JSONAuthHandler klase s objektom korisnika
-        JSONAuthHandler database = new JSONAuthHandler(new Korisnik(username, password));
+        JSONAuthHandler database = new JSONAuthHandler(korisnik);
 
         // Dobavljanje liste korisnika iz JSONAuthHandler
         ArrayList<HashMap<String, Object>> users = database.getUsers();
@@ -48,7 +49,7 @@ public class LoginListener implements ActionListener {
             if (dbUsername.equals(username) && dbPassword.equals(password)) {
 
                 //prikazivanje glavne forme nakon uspjesnog login-a
-                new MainClientForm("Main Form");
+                new MainClientForm("Main Form", korisnik);
                 //uklanjanje trenutne login forme
                 frame.dispose();
 
