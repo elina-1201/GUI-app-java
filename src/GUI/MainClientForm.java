@@ -5,12 +5,15 @@ import Listeners.BookListSelectListener;
 import Listeners.MainFormButtonListener;
 import Listeners.SearchListener;
 import JSON.JSONHandler;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static JSON.JSONCartHandler.addObjectToCart;
 
 public class MainClientForm extends Form {
     Korisnik korisnik;
@@ -31,7 +34,7 @@ public class MainClientForm extends Form {
     public MainClientForm(String title, Korisnik korisnik) {
         super(title);
         this.korisnik = korisnik;
-
+        this.dodajUKorpuButton.addActionListener(ActionEvent -> addSelectedItemToCart());
         //listener koji prati polozaj kursora, koristi se za PRETRAGU
         this.textField1.addCaretListener(new SearchListener(this.comboBox1, this.textField1, this.list));
         //listener na IZMJENU knjige
@@ -74,6 +77,27 @@ public class MainClientForm extends Form {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //uspostavljanje razmaka izmedju item-a
         list.setFixedCellHeight(30);
+    }
+
+    private void addSelectedItemToCart() {
+        // Dobivanje selektovanog itema
+        Object selectedItem = list.getSelectedValue();
+
+        if (selectedItem instanceof HashMap) {
+            HashMap<String, Object> selectedBook = (HashMap<String, Object>) selectedItem;
+
+            // Novi json object
+            JSONObject selectedObject = new JSONObject();
+
+            // Sva svojstva u json object
+            selectedObject.putAll(selectedBook);
+
+            // Dodavanje u korpu u jsonu
+            addObjectToCart(korisnik.getUsername(), selectedObject);
+
+        } else {
+            JOptionPane.showMessageDialog(frame, "Select a book to add to the cart.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void fillCategory() {
