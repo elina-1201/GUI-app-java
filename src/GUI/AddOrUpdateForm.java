@@ -70,6 +70,9 @@ public class AddOrUpdateForm extends Form {
         //odabir prvog i jedinog item-a u listi
         HashMap<String, Object> item = selectedItem.get(0);
 
+        //postavljanje vrijednosti liste za dostupnost u zavisnosti od toga da li je true ili false
+        String selected = (boolean) item.get("dostupnost") ? "DA" : "NE";
+
         //pretvaranje values u integer, jer spinner prima samo taj tip
         Integer brStr = Integer.parseInt(item.get("broj stranica").toString());
         Integer brojPrimjeraka = Integer.parseInt(item.get("broj primjeraka").toString());
@@ -84,6 +87,7 @@ public class AddOrUpdateForm extends Form {
         this.textFieldCijena.setText(item.get("cijena").toString());
         this.spinnerPrimjerak.setValue(brojPrimjeraka);
         this.spinnerBrStr.setValue(brStr);
+        this.comboBoxDostupnost.setSelectedItem(selected);
     }
 
 
@@ -119,7 +123,19 @@ public class AddOrUpdateForm extends Form {
             indicatorBrojeva = true;
         }
         catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Pogresno unesen broj ");
+            if(!textFieldCijena.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Pogresno unesen broj ");
+            }
+        }
+
+        if(cijena < 0 || brPrimjeraka < 0 || brStr < 0) {
+            JOptionPane.showMessageDialog(null, "Broj ne smije biti negativan");
+            return;
+        }
+
+        if(brStr == 0){
+            JOptionPane.showMessageDialog(null, "Prodajemo knjige, ne samo korice \n(broj stranica treba biti veci od nule)");
+            return;
         }
 
         //provjera da li su sva polja popunjena i postavljanje indikatora na false ako sva polja nisu popunjena
@@ -145,7 +161,7 @@ public class AddOrUpdateForm extends Form {
             josnhandler.write();
 
             //poruka o uspjesnoj akciji
-            JOptionPane.showMessageDialog(null, "Knjiga je uspjesno dodana");
+            JOptionPane.showMessageDialog(this.frame, "Uspjesno sacuvano");
 
             //promijena formi
             new MainClientForm("Main Form", this.korisnik);

@@ -58,6 +58,10 @@ public class MainFormButtonListener implements ActionListener {
     }
 
     public void delete() {
+        //provjera da li korisnik zaista zeli obrisati item
+        int reply = JOptionPane.showConfirmDialog(null, "Jeste li sigurni?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if(reply == JOptionPane.NO_OPTION) return;
+
         //dohvatanje selektovanog item-a
         ArrayList<HashMap<String, Object>> selectedItem = (ArrayList<HashMap<String, Object>>) this.list.getSelectedValuesList();
         HashMap<String, Object> item = selectedItem.get(0);

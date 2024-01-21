@@ -85,6 +85,7 @@ public class JSONAuthHandler {
         // Kreiranje JSON objekta sa korisničkim podacima
         authObject.put("username", username);
         authObject.put("password", password);
+        authObject.put("cart", new JSONArray());
 
         // Dodavanje novog korisnika u JSONArray
         jsonArray.add(authObject);

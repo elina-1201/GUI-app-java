@@ -1,12 +1,14 @@
 package GUI;
 
 import Components.Korisnik;
+import JSON.JSONHandler;
 import org.json.simple.JSONArray;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 
@@ -26,41 +28,45 @@ public class ShoppingCartForm extends Form {
         super(title);
         this.korisnik = korisnik;
 
-
-        JSONArray cartObjects = getCartObjects(korisnik.getUsername());
-
-
-        listModel = new DefaultListModel<>();
-        for (Object cartObject : cartObjects) {
-            listModel.addElement(cartObject);
-        }
-
-        list1.setModel(listModel); // Postvaljanje DefaultListModel u JList
-
         this.nazadButton.addActionListener(ActionEvent -> changeFrame());
+
         this.kupovinaButton.addActionListener(ActionEvent -> handleKupovinaButton());
-
-
         this.ukloniButton.addActionListener(e -> removeSelectedItem());
 
+        this.panel1.setBorder(new EmptyBorder(0, 10, 10, 10));
         create(this.frame, panel1);
-        this.panel1.setBorder(new EmptyBorder(10, 10, 10, 10));
+        fillList();
+
+
+
+//        changeInStock();
     }
 
     public void changeFrame() {
         new MainClientForm("Main Form", this.korisnik);
         this.frame.dispose();
     }
+    public void fillList(){
+        JSONArray cartObjects = getCartObjects(korisnik.getUsername());
+
+        listModel = new DefaultListModel<>();
+        for (Object cartObject : cartObjects) {
+            listModel.addElement(cartObject);
+        }
+
+        list1.setModel(listModel); // Postavljanje DefaultListModel u JList
+        list1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
 
     private void removeSelectedItem() {
         int selectedIndex = list1.getSelectedIndex();
         if (selectedIndex != -1) {
+            //provjera da li korisnik zaista zeli obrisati item u korpi
+            int reply = JOptionPane.showConfirmDialog(null, "Jeste li sigurni?", "Confirm", JOptionPane.YES_NO_OPTION);
+            if(reply == JOptionPane.NO_OPTION) return;
 
             Object selectedItem = list1.getSelectedValue();
-
-
                 JSONObject selectedObject = (JSONObject) selectedItem;
-                System.out.println(selectedItem);
                 String isbn = selectedObject.containsKey("isbn") ? selectedObject.get("isbn").toString() : null;
 
                 if (isbn != null) {
@@ -70,18 +76,49 @@ public class ShoppingCartForm extends Form {
                 } else {
                     JOptionPane.showMessageDialog(frame, "Selected item does not have an ISBN.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-
         } else {
-            JOptionPane.showMessageDialog(frame, "Odaberite knjigu koju ćeliti maknuti iz korpe.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Odaberite knjigu koju zelite maknuti iz korpe.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //funkcija koja ce umanjivati broj primjeraka kada se item kupi
+    public void changeInStock(){
+        JSONArray cartObjects = getCartObjects(korisnik.getUsername());
+        JSONHandler jsonHandler = new JSONHandler();
+
+        for(Object object: cartObjects){
+            HashMap<String, Object> item = (HashMap<String, Object>) object;
+            String isbn = (String) item.get("isbn");
+
+            //pronalazak knjige koja je u bazi
+            JSONObject objectInShop = jsonHandler.findByIsbn(isbn);
+            //brisanje zapisa u kojem stoji stara kolicina
+            jsonHandler.deleteByIsbn(isbn);
+
+            Integer inStock = Integer.parseInt(objectInShop.get("broj primjeraka").toString());
+            Integer kolicina = Integer.parseInt(item.get("kolicina").toString());
+            Integer newInStock = inStock - kolicina;
+
+            objectInShop.put("broj primjeraka", newInStock);
+
+            //ako nije ostalo primjeraka u zalihama, uciniti da proizvod bude nedostupan
+            if(newInStock == 0) {
+                objectInShop.put("dostupnost", false);
+            }
+
+            jsonHandler.addObjectToCart(objectInShop);
         }
     }
 
     private void handleKupovinaButton() {
-        // Provjera d ali je korppa prazna
+        // Provjera da li je korppa prazna
         if (list1.getModel().getSize() == 0) {
             JOptionPane.showMessageDialog(frame, "Nemate artikala u korpi za kupovinu.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        //promijena broja primjeraka nakon kupovine
+        changeInStock();
 
        // Izbrisi sve iz json korpe
         clearCart(korisnik.getUsername());
@@ -97,6 +134,5 @@ public class ShoppingCartForm extends Form {
         DefaultListModel listModel = new DefaultListModel();
         list1.setModel(listModel);
     }
-
 }
 

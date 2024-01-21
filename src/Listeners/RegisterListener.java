@@ -27,6 +27,7 @@ public class RegisterListener implements ActionListener {
 
         // Provjera da li su korisničko ime i šifra prazni, i ako jesu, prekidamo daljnju obradu
         if(username.trim().isEmpty() || password.trim().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Unesite svoje ime i password da biste se registrovali");
             return;
         }
 
@@ -39,8 +40,8 @@ public class RegisterListener implements ActionListener {
         // Provjera postojanja korisnika sa istim korisničkim imenom
         boolean userExist = false;
         for (HashMap<String, Object> user : users){
-            String dbUsername = ((String) user.get("username").toString());
-            System.out.println(dbUsername);
+            String dbUsername = (user.get("username").toString());
+
             if(dbUsername.equals(username)){
                 // Postavljanje da korisnik već postoji i prikazivanje odgovarajuće poruke
                 userExist = true;

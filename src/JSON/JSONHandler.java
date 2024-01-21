@@ -22,12 +22,14 @@ public class JSONHandler {
         this.book = book;
     }
 
+    private static final String FILE_PATH = "src/resources/books.json";
+
     //funkcija za citanje podataka iz file
     public JSONArray readFile(){
         JSONParser jsonParser = new JSONParser();
         FileReader reader = null;
         try {
-            reader = new FileReader("src/resources/books.json");
+            reader = new FileReader(FILE_PATH);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -62,8 +64,7 @@ public class JSONHandler {
         return list;
     }
 
-    //funkcija za brisanje knjige pomocu isbn
-    public void deleteByIsbn(String isbn) {
+    public JSONObject findByIsbn(String isbn) {
         JSONArray jsonArray = readFile();
         JSONObject foundedObject = null;
         for(Object item: jsonArray) {
@@ -72,14 +73,28 @@ public class JSONHandler {
                 foundedObject = jsonObject;
             }
         }
+        return foundedObject;
+    }
+
+    //funkcija za brisanje knjige pomocu isbn
+    public void deleteByIsbn(String isbn) {
+        JSONArray jsonArray = readFile();
+        JSONObject foundedObject = findByIsbn(isbn);
 
         jsonArray.remove(foundedObject);
         writeFile(jsonArray);
     }
 
+    public void addObjectToCart(JSONObject objectToAdd) {
+        JSONArray jsonArray = readFile();
+        jsonArray.add(objectToAdd);
+
+        writeFile(jsonArray);
+    }
+
     //funkcija za pisanje podataka u json file
     public void writeFile(JSONArray jsonArray){
-        try (FileWriter file = new FileWriter("src/resources/books.json")) {
+        try (FileWriter file = new FileWriter(FILE_PATH)) {
             file.write(jsonArray.toString());
             file.flush();
 
@@ -115,7 +130,6 @@ public class JSONHandler {
         bookObject.put("broj stranica", brStr);
         bookObject.put("kategorija", kategorija);
         bookObject.put("broj primjeraka", brPrimjeraka);
-        System.out.println(brPrimjeraka);
 
         //dodavanje knjige u JSON
         jsonArray.add(bookObject);

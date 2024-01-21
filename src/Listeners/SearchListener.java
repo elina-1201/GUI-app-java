@@ -18,8 +18,6 @@ public class SearchListener implements CaretListener {
         this.searchField = searchField;
         this.comboBox = comboBox;
         this.list = list;
-
-
     }
     @Override
     public void caretUpdate(CaretEvent caretEvent) {
@@ -50,11 +48,18 @@ public class SearchListener implements CaretListener {
                 String category = (String) this.comboBox.getSelectedItem();
                 String word = this.searchField.getText();
 
-                //provjeravanje da li se pronadjeni rezultati podudaraju sa kriterijima
-                if(key.toString().equalsIgnoreCase(category) && row.get(key).toString().toLowerCase().contains(word.toLowerCase())){
-                    result.add(row);
-                }
+                boolean checkCategory = key.toString().equalsIgnoreCase(category);
+                String listRow = row.get(key).toString().toLowerCase();
 
+                //provjeravanje da li se pronadjeni rezultati podudaraju sa kriterijima
+                if(checkCategory) {
+                    if (key.equals("broj primjeraka") || key.equals("isbn") || key.equals("cijena") || key.equals("broj stranica")) {
+                        if(listRow.startsWith(word.toLowerCase())) result.add(row);
+                    }
+                    else {
+                        if(listRow.contains(word.toLowerCase())) result.add(row);
+                    }
+                }
             }
         }
         //vraca se lista item-a koji se podudaraju sa zadanim uslovima

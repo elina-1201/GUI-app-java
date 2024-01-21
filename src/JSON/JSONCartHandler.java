@@ -10,7 +10,7 @@ import java.io.IOException;
 public class JSONCartHandler {
     private static final String FILE_PATH = "src/resources/users.json";
 
-    public static void addObjectToCart(String username, JSONObject objectToAdd) {
+    public static void addObjectToCart(String username, JSONObject objectToAdd, int kolicina) {
         JSONParser jsonParser = new JSONParser();
 
         try (FileReader reader = new FileReader(FILE_PATH)) {
@@ -24,6 +24,9 @@ public class JSONCartHandler {
 
                     JSONArray cart = (JSONArray) currentUser.get("cart");
                     cart.add(objectToAdd);
+
+                    //zapisati odabranu kolicinu artikla
+                    objectToAdd.put("kolicina", kolicina);
 
 
                     try (FileWriter fileWriter = new FileWriter(FILE_PATH)) {
@@ -147,6 +150,4 @@ public class JSONCartHandler {
         }
         return false;
     }
-
-
 }
