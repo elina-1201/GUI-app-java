@@ -10,7 +10,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +55,8 @@ public class MainClientForm extends Form {
 
         //listener koji prati OZNACENI proizvod
         this.list.addListSelectionListener(new BookListSelectListener(this.dodajUKorpuButton, this.list, this.korisnik, this.ukloniButton, this.izmijeniButton, this.spinner1));
+        //postavljanje broja u polju na jedinicu
+        this.spinner1.setValue(1);
 
         //kreiranje forme
         create(this.frame, this.panel1);

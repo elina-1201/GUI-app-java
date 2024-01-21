@@ -1,1 +1,17 @@
-[{"password":"edo","cart":[],"username":"edo"},{"password":"edin","cart":[],"username":"edin"},{"password":"elina","cart":[],"username":"elina"}]
+[
+  {
+    "password": "edo",
+    "cart": [],
+    "username": "edo"
+  },
+  {
+    "password": "edin",
+    "cart": [],
+    "username": "edin"
+  },
+  {
+    "password": "elina",
+    "cart": [],
+    "username": "elina"
+  }
+]
